@@ -1,13 +1,18 @@
 # import the opencv library
-from termios import VDISCARD
 import cv2
 import os
 import argparse
-from test import test
 import torchvision.io as io
 import torchvision.transforms as transforms
 from model import Net
 import torch
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--vid_file', type=str, required=True)
+parser.add_argument('--scale', type=int, required=True)
+parser.add_argument('--ver', type=int, required=True)
+parser.add_argument('--device', type=str, required=False, default='cuda' if torch.cuda.is_available() else 'cpu')
+args = parser.parse_args()
 
 def read_image(filepath):
     image = io.read_image(filepath, io.ImageReadMode.RGB)
@@ -128,13 +133,13 @@ def save_sr_video(test_video, scale, version, device):
         # Display the resulting frame
         print(f"processing frame {count}...")
         cv2.imwrite(f"testdata/Video SR/temp/frame{count}_lr.jpg", frame)
-        view(scale, f"testdata/temp/frame{count}.jpg", version, d)
+        view(scale, f"testdata/Video SR/temp/frame{count}_lr.jpg", version, device)
         if count==1:
             frame = cv2.imread(f"testdata/Video SR/temp/sr.png")
             height, width, layers = frame.shape  
             video = cv2.VideoWriter(f"{test_video}_x{scale}_sr.avi", cv2.VideoWriter_fourcc(*'MJPG'), 30, (width, height)) 
-        video.write(cv2.imread(cv2.imread(f"testdata/Video SR/temp/sr.png")))
-        os.remove(f"testdata/Frames/lr/frame{count}.jpg")
+        video.write(cv2.imread(f"testdata/Video SR/temp/sr.png"))
+        os.remove(f"testdata/Video SR/temp/frame{count}_lr.jpg")
         os.remove(f"testdata/Video SR/temp/sr.png")
         # the 'q' button is set as the
         # quitting button you may use any
@@ -148,11 +153,6 @@ def save_sr_video(test_video, scale, version, device):
     # Destroy all the windows
     cv2.destroyAllWindows()
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--vid_file', type=str, required=True)
-parser.add_argument('--scale', type=int, required=True)
-parser.add_argument('--ver', type=int, required=True)
-parser.add_argument('--device', type=str, required=False, default='cuda' if torch.cuda.is_available() else 'cpu')
-args = parser.parse_args()
+
 
 save_sr_video(args.vid_file, args.scale, args.ver, args.device)
