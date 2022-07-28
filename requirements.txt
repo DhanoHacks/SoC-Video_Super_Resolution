@@ -1,0 +1,4 @@
+Atleast 16GB of CPU RAM for creating SR version of 1080p video.
+4GB VRAM if using GPU for training will be sufficient.
+Need the following python libraries installed:
+    argparse, torchvision, torch, matplotlib, cv2, os, numpy (if running preprocess.py)

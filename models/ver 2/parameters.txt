@@ -1,0 +1,7 @@
+num_epochs = 3
+batch_size = 4
+learning_rate = 0.001
+
+scale 2 PSNR 35.5669921875
+scale 3 PSNR 32.549688720703124
+scale 4 PSNR 29.40009765625
